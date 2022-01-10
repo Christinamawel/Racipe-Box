@@ -1,0 +1,26 @@
+@model RecipeBox.Models.Recipe
+
+<h4>Add your new recipe here!</h4>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(model => model.Name)
+    @Html.TextBoxFor(model => model.Name)
+
+    @Html.LabelFor(model => model.Ingredients)
+    @Html.TextBoxFor(model => model.Ingredients)
+
+    @Html.LabelFor(model => model.Directions)
+    @Html.TextBoxFor(model => model.Directions)
+
+    @Html.LabelFor(model => model.Rating)
+    @Html.TextBoxFor(model => model.Rating)
+    @*,  new { @min="0" , @max="10" , type = "number"})*@
+
+    @Html.Label("Select category")
+    @Html.DropDownList("CategoryId")
+
+    <input type="submit" value="Add new recipe" class="btn btn-default" />
+}
+
+<p>@Html.ActionLink("Show all recipes", "Index")</p>
