@@ -18,7 +18,7 @@
     @Html.TextBoxFor(model => model.Directions)
 
     @Html.LabelFor(model => model.Rating)
-    @Html.TextBoxFor(model => model.Rating)
+    @Html.TextBoxFor(model => model.Rating,  new { @min="0" , @max="5" , type = "number"})
 
     @Html.Label("Select category")
     @Html.DropDownList("CategoryId")

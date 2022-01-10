@@ -105,5 +105,15 @@ namespace RecipeBox.Controllers
     {
       return View();
     }
+
+    [HttpPost]
+    public ActionResult DeleteRecipe(int joinId, int categoryId)
+    {
+      var joinEntry = _db.CategoryRecipe.FirstOrDefault(entry => entry.CategoryRecipeId == joinId);
+      _db.CategoryRecipe.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Details", new { id = categoryId });
+    }
+
   }
 }

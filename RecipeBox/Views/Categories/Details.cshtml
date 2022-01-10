@@ -15,6 +15,12 @@ else
     @foreach(var join in Model.JoinEntities)
     {
       <li>@join.Recipe.Name</li>
+      @using (Html.BeginForm("DeleteRecipe", "Categories"))
+      {
+      @Html.Hidden("joinId", @join.CategoryRecipeId)
+      @Html.Hidden("categoryId", @Model.CategoryId)
+      <input type="submit" value="Delete"/>
+      }
     }
   </ul>
 }
