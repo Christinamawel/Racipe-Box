@@ -7,6 +7,7 @@ namespace RecipeBox.Models
     public Recipe()
     {
       this.JoinEntities = new HashSet<CategoryRecipe>();
+      this.JoinIngredients = new HashSet<IngredientRecipe>();
     }
 
     public int RecipeId { get; set; }
@@ -17,5 +18,6 @@ namespace RecipeBox.Models
     public virtual ApplicationUser User { get; set; }
 
     public virtual ICollection<CategoryRecipe> JoinEntities { get; }
+    public virtual ICollection<IngredientRecipe> JoinIngredients { get; }
   }
 }
