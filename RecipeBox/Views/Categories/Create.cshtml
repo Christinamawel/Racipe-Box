@@ -1,7 +1,9 @@
 @model RecipeBox.Models.Category
 
 <h4>Add a new categories</h4>
-
+@if(ViewBag.Same!="test"){
+  <p>@ViewBag.Same</p>
+}
 @using(Html.BeginForm())
 {
   @Html.LabelFor(model => model.Name)

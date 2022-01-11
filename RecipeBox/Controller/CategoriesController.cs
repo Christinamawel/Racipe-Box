@@ -27,16 +27,25 @@ namespace RecipeBox.Controllers
       return View(model);
     }
 
-    public ActionResult Create()
+    public ActionResult Create(string str)
     {
+      ViewBag.Same = str;
       return View();
     }
 
     [HttpPost]
     public ActionResult Create(Category category)
-    {
-      _db.Categories.Add(category);
+    { 
+      bool alreadyExists = _db.Categories.Any(x => x.Name == category.Name);
+      if(!alreadyExists)
+      {
+        _db.Categories.Add(category);
+      }
       _db.SaveChanges();
+      if(alreadyExists)
+      {
+        return RedirectToAction("Create", new {str = "This category already exists"});
+      }  
       return RedirectToAction("Index");
     }
 
