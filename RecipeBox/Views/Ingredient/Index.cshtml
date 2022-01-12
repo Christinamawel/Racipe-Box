@@ -1,0 +1,26 @@
+@using RecipeBox.Models;
+@model List<RecipeBox.Models.Ingredient>;
+
+<h2>Ingredients</h2>
+
+<form action="Ingredient/Create" method="post">
+  <label for="name">Ingredient Name</label>
+  <input name="name" type="text" required>
+  <button type="submit">Add a new Ingredient</button>
+</form>
+
+@if(Model.Count == 0)
+{
+  <p>You have not added any ingredients yet!</p>
+}
+else
+{
+  <ul>
+    @foreach(Ingredient ing in Model)
+    {
+      <li>@Html.ActionLink($"{ing.Name}", "Details", new { id = ing.IngredientId })</li>
+    }
+  </ul>
+}
+
+<p>@Html.ActionLink("Home", "Index", "Home")</p>

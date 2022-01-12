@@ -10,11 +10,11 @@
 }
 else
 {
-  <h4>Recipies in this category</h4>
+  <h4>Recipes in this category</h4>
   <ul>
     @foreach(var join in Model.JoinEntities)
     {
-      <li>@join.Recipe.Name</li>
+      <li>@Html.ActionLink($"{@join.Recipe.Name}","Details", "Recipes", new { id = join.Recipe.RecipeId })</li>
       @using (Html.BeginForm("DeleteRecipe", "Categories"))
       {
       @Html.Hidden("joinId", @join.CategoryRecipeId)

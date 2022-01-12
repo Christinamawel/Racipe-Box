@@ -3,7 +3,6 @@
 <h2>Recipe Details</h2>
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
-<h3>@Html.DisplayNameFor(model => model.Ingredients): @Html.DisplayFor(model => model.Ingredients)</h3>
 <h3>@Html.DisplayNameFor(model => model.Directions): @Html.DisplayFor(model => model.Directions)</h3>
 <h3>@Html.DisplayNameFor(model => model.Rating): @Html.DisplayFor(model => model.Rating)</h3>
 
@@ -27,8 +26,29 @@ else
   }
   </ul>
 }
+<h4>Ingredients List</h4>
+@if(Model.JoinIngredients.Count == 0)
+{
+  <p>This recipe currently has no ingredients</p>
+}
+else
+{
+  <ul>
+    @foreach(var join in Model.JoinIngredients)
+    {
+      <li>@join.ingredient.Name</li>
+      @using (Html.BeginForm("DeleteIngredient", "Recipes"))
+      {
+        @Html.Hidden("joinId", @join.IngredientRecipeId)
+        @Html.Hidden("recipeId", @Model.RecipeId)
+        <input type="submit" value="Delete"  class="btn btn-danger" />
+      }
+    }
+  </ul>
+}
 
 <p>@Html.ActionLink("Back to list", "Index")</p>
 <p>@Html.ActionLink("Edit Recipe", "Edit", new { id = Model.RecipeId })</p>
 <p>@Html.ActionLink("Delete Recipe", "Delete", new { id = Model.RecipeId })</p>
 <p>@Html.ActionLink("Add a Category", "AddCategory", new { id = Model.RecipeId })</p>
+<p>@Html.ActionLink("Add Ingredients", "AddIngredient", new { id = Model.RecipeId }, new { str = "ok"})</p>

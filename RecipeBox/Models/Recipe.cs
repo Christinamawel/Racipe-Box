@@ -12,7 +12,6 @@ namespace RecipeBox.Models
 
     public int RecipeId { get; set; }
     public string Name { get; set; }
-    public string Ingredients { get; set; }
     public string Directions { get; set; }
     public int Rating { get; set; }
     public virtual ApplicationUser User { get; set; }

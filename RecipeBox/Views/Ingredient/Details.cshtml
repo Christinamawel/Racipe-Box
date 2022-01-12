@@ -1,0 +1,20 @@
+@model RecipeBox.Models.Ingredient
+
+<h2>Recipes with this Ingredient</h2>
+
+<h3>@Html.DisplayFor(model => model.Name)</h3>
+
+@if(Model.JoinEntities.Count == 0)
+{
+  <p>There are no recipes with this ingredient!</p>
+  <p>@Html.ActionLink("Delete Ingredient", "Delete", new { id = Model.IngredientId })</p>
+}
+else
+{
+  <ul>
+    @foreach(var join in Model.JoinEntities)
+    {
+      <li>@Html.ActionLink($"{@join.recipe.Name}", "Details", "Recipes", new { id = @join.recipe.RecipeId }) | @join.recipe.Rating⭐</li>
+    }
+  </ul>
+}

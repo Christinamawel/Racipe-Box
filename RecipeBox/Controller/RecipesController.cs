@@ -132,5 +132,41 @@ namespace RecipeBox.Controllers
     {
       return View();
     }
+
+    public ActionResult AddIngredient(int id, string str)
+    {
+      ViewBag.Same = str;
+      var thisRecipe = _db.Recipes
+          .Include(recipe => recipe.JoinIngredients)
+          .ThenInclude(join => join.ingredient)
+          .FirstOrDefault(recipes => recipes.RecipeId == id);
+      ViewBag.IngredientId = new SelectList(_db.Ingredients, "IngredientId", "Name");
+      return View(thisRecipe);
+    }
+
+    [HttpPost]
+    public ActionResult AddIngredient(Recipe recipe, int IngredientId)
+    {
+      bool alreadyExists = _db.IngredientRecipe.Any(IngredientRecipe => IngredientRecipe.IngredientId == IngredientId && IngredientRecipe.RecipeId == recipe.RecipeId);
+      if (IngredientId != 0 && !alreadyExists)
+      {
+        _db.IngredientRecipe.Add(new IngredientRecipe() { IngredientId = IngredientId, RecipeId = recipe.RecipeId });
+      }
+      _db.SaveChanges();
+      if(alreadyExists)
+      {
+        return RedirectToAction("AddIngredient", new { id = recipe.RecipeId, str = "This Recipe already contains that ingredient" });
+      }
+      return RedirectToAction("AddIngredient", new { id = recipe.RecipeId, str = "ok" });
+    }
+
+    [HttpPost]
+    public ActionResult DeleteIngredient(int joinId, int recipeId)
+    {
+      var joinEntry = _db.IngredientRecipe.FirstOrDefault(entry => entry.IngredientRecipeId == joinId);
+      _db.IngredientRecipe.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Details", new {id = recipeId });
+    }
   }
 }

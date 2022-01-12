@@ -1,0 +1,39 @@
+@model RecipeBox.Models.Recipe
+
+<h2>Add Ingredients to @Html.DisplayFor(model => model.Name)</h2>
+
+@using (Html.BeginForm())
+{
+  @Html.HiddenFor(model => model.RecipeId)
+  @Html.Label("Select Ingredient")
+  @Html.DropDownList("IngredientId")
+  <input type="submit" value="Add Ingredient" class="btn btn-default" />
+}
+
+<h4>Ingredients List</h4>
+@if(Model.JoinIngredients.Count == 0)
+{
+  <p>This recipe currently has no ingredients</p>
+}
+else
+{
+  @if(ViewBag.Same!="ok")
+  {
+  <p>@ViewBag.Same</p>
+  }
+  <ul>
+    @foreach(var join in Model.JoinIngredients)
+    {
+      <li>@join.ingredient.Name</li>
+      @using (Html.BeginForm("DeleteIngredient", "Recipes"))
+      {
+        @Html.Hidden("joinId", @join.IngredientRecipeId)
+        @Html.Hidden("recipeId", @Model.RecipeId)
+        <input type="submit" value="Delete"  class="btn btn-danger" />
+      }
+    }
+  </ul>
+}
+
+<p>@Html.ActionLink("Back to Recipe Card", "Details", new { id = Model.RecipeId})
+<p>@Html.ActionLink("Add new ingredient", "Index", "Ingredient")
