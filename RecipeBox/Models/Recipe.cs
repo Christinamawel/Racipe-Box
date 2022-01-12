@@ -8,6 +8,7 @@ namespace RecipeBox.Models
     {
       this.JoinEntities = new HashSet<CategoryRecipe>();
       this.JoinIngredients = new HashSet<IngredientRecipe>();
+      this.Shared = false;
     }
 
     public int RecipeId { get; set; }
@@ -15,6 +16,7 @@ namespace RecipeBox.Models
     public string Directions { get; set; }
     public int Rating { get; set; }
     public virtual ApplicationUser User { get; set; }
+    public bool Shared { get; set; }
 
     public virtual ICollection<CategoryRecipe> JoinEntities { get; }
     public virtual ICollection<IngredientRecipe> JoinIngredients { get; }

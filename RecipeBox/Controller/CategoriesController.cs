@@ -10,22 +10,31 @@ using System.Collections.Generic;
 using System.Linq;
 
 
+
 namespace RecipeBox.Controllers
 {
+  [Authorize]
   public class CategoriesController : Controller
   {
     private readonly RecipeBoxContext _db;
+    
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public CategoriesController(RecipeBoxContext db)
+    public CategoriesController(UserManager<ApplicationUser> userManager, RecipeBoxContext db)
     {
+      _userManager = userManager;
       _db = db;
     }
 
-    public ActionResult Index()
+    public async Task<ActionResult> Index()
     {
-      List<Category> model = _db.Categories.ToList();
-      return View(model);
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      var userItems = _db.Categories.Where(entry => entry.User.Id == currentUser.Id).ToList();
+      return View(userItems);
     }
+
+    
 
     public ActionResult Create(string str)
     {
@@ -34,22 +43,22 @@ namespace RecipeBox.Controllers
     }
 
     [HttpPost]
-    public ActionResult Create(Category category)
-    { 
-      bool alreadyExists = _db.Categories.Any(x => x.Name == category.Name);
-      if(!alreadyExists)
-      {
-        _db.Categories.Add(category);
-      }
+    public async Task<ActionResult> Create(Category category, int RecipeId)
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      category.User = currentUser;
+      _db.Categories.Add(category);
       _db.SaveChanges();
-      if(alreadyExists)
-      {
-        return RedirectToAction("Create", new {str = "This category already exists"});
-      }  
-      return RedirectToAction("Index");
+      if (RecipeId != 0)
+    {
+        _db.CategoryRecipe.Add(new CategoryRecipe() { RecipeId = RecipeId, CategoryId = category.CategoryId });
     }
-
-    public ActionResult Details(int id)
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    } 
+    
+      public ActionResult Details(int id)
     {
       var thisCategory = _db.Categories
           .Include(category => category.JoinEntities)
@@ -87,10 +96,12 @@ namespace RecipeBox.Controllers
       return RedirectToAction("Index");
     }
 
-    public ActionResult AddRecipe(int id)
+    public async Task<ActionResult> AddRecipe(int id)
     {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
       var thisCategory = _db.Categories.FirstOrDefault(category => category.CategoryId == id);
-      ViewBag.RecipeId = new SelectList(_db.Recipes, "RecipeId", "Name");
+      ViewBag.RecipeId = new SelectList(_db.Recipes.Where(entry => entry.User.Id == currentUser.Id), "RecipeId", "Name");
       return View(thisCategory);
     }
 

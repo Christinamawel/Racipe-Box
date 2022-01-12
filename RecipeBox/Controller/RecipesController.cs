@@ -31,9 +31,11 @@ namespace RecipeBox.Controllers
       return View(userRecipes.OrderByDescending(x => x.Rating));
     }
 
-    public ActionResult Create()
+    public async Task<ActionResult> Create()
     {
-      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      ViewBag.CategoryId = new SelectList(_db.Categories.Where(entry => entry.User.Id == currentUser.Id), "CategoryId", "Name");
       return View();
     }
 
@@ -105,10 +107,12 @@ namespace RecipeBox.Controllers
       return RedirectToAction("Details", new { id = recipeId });
     }
 
-    public ActionResult AddCategory(int id)
+    public async Task<ActionResult> AddCategory(int id)
     {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
       var thisRecipe = _db.Recipes.FirstOrDefault(recipes => recipes.RecipeId == id);
-      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+      ViewBag.CategoryId = new SelectList(_db.Categories.Where(entry => entry.User.Id == currentUser.Id), "CategoryId", "Name");
       return View(thisRecipe);
     }
 
@@ -167,6 +171,16 @@ namespace RecipeBox.Controllers
       _db.IngredientRecipe.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Details", new {id = recipeId });
+    }
+
+    [HttpPost]
+    public ActionResult ShareRecipe(int recipeId)
+    {
+      var thisRecipe = _db.Recipes.FirstOrDefault(recipe => recipe.RecipeId == recipeId);
+      thisRecipe.Shared = !thisRecipe.Shared;
+      _db.Entry(thisRecipe).State = EntityState.Modified;
+      _db.SaveChanges();
+      return RedirectToAction("Details", new {id = thisRecipe.RecipeId});
     }
   }
 }

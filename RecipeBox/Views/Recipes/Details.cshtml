@@ -5,6 +5,12 @@
 <h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
 <h3>@Html.DisplayNameFor(model => model.Directions): @Html.DisplayFor(model => model.Directions)</h3>
 <h3>@Html.DisplayNameFor(model => model.Rating): @Html.DisplayFor(model => model.Rating)</h3>
+<h3>@Html.DisplayNameFor(model => model.Shared): @Html.DisplayFor(model => model.Shared)</h3>
+@using (Html.BeginForm("ShareRecipe", "Recipes"))
+  {
+    @Html.Hidden("recipeId", @Model.RecipeId)
+    <input type="submit" value="Share this recipe"  class="btn" />
+  }
 
 @if(Model.JoinEntities.Count == 0)
 {

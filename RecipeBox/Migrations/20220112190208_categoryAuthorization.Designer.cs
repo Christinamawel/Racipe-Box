@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeBox.Models;
 
 namespace RecipeBox.Migrations
 {
     [DbContext(typeof(RecipeBoxContext))]
-    partial class RecipeBoxContextModelSnapshot : ModelSnapshot
+    [Migration("20220112190208_categoryAuthorization")]
+    partial class categoryAuthorization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,9 +300,6 @@ namespace RecipeBox.Migrations
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Shared")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
