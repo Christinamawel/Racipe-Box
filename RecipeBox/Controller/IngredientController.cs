@@ -22,7 +22,7 @@ namespace RecipeBox.Controllers
 
     public ActionResult Index()
     {
-      List<Ingredient> model = _db.Ingredients.ToList();
+      List<Ingredient> model = _db.Ingredients.OrderBy(x => x.Name).ToList();
       return View(model);
     }
 
@@ -33,7 +33,7 @@ namespace RecipeBox.Controllers
       if(!alreadyExists)
       {
         Ingredient newIng = new Ingredient();
-        newIng.Name = name;
+        newIng.Name = name.ToLower();
         _db.Ingredients.Add(newIng);
       }
       _db.SaveChanges();

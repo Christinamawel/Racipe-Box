@@ -2,20 +2,20 @@
 @model IEnumerable<RecipeBox.Models.Recipe>;
 
 <h2>Recipes for @User.Identity.Name</h2>
+<div class="shared">
+  @if(Model.Any())
+  {
+    <ul>
+      @foreach(Recipe recipe in Model)
+      {
+        <li>@Html.ActionLink($"{recipe.Name}", "Details", new { id = recipe.RecipeId }) | @recipe.Rating⭐</li>
+      }
+    </ul>
+  }
+  else
+  {
+    <h3>No recipes have been added yet!</h3>
+  }
+</div>
 
-@if(Model.Any())
-{
-  <ul>
-    @foreach(Recipe recipe in Model)
-    {
-      <li>@Html.ActionLink($"{recipe.Name}", "Details", new { id = recipe.RecipeId }) | @recipe.Rating⭐</li>
-    }
-  </ul>
-}
-else
-{
-  <h3>No recipes have been added yet!</h3>
-}
-
-<p>@Html.ActionLink("Add a new recipe", "Create")</p>
-<p>@Html.ActionLink("Home", "Index", "Home")</p>
+<p class="buttonz">@Html.ActionLink("Add a new recipe", "Create")</p>

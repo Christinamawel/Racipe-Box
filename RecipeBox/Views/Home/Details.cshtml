@@ -1,0 +1,25 @@
+@model RecipeBox.Models.Recipe
+
+<h2>Recipe Details</h2>
+<hr />
+<h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
+<h3>@Html.DisplayNameFor(model => model.Directions): @Html.DisplayFor(model => model.Directions)</h3>
+<h3>@Html.DisplayNameFor(model => model.Rating): @Html.DisplayFor(model => model.Rating)</h3>
+<h3>@Html.DisplayNameFor(model => model.Shared): @Html.DisplayFor(model => model.Shared)</h3>
+
+<h4>Ingredients List</h4>
+@if(Model.JoinIngredients.Count == 0)
+{
+  <p>This recipe currently has no ingredients</p>
+}
+else
+{
+  <ul>
+    @foreach(var join in Model.JoinIngredients)
+    {
+      <li>@join.ingredient.Name</li>
+    }
+  </ul>
+}
+
+<p>@Html.ActionLink("Back to list", "Index")</p>

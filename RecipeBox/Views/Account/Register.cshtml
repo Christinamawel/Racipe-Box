@@ -1,3 +1,4 @@
+
 @using RecipeBox.ViewModels
 
 @model RegisterViewModel
@@ -5,14 +6,15 @@
 <h2>Register a new user</h2>
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
 {
-  @Html.LabelFor(user => user.Email)
-  @Html.TextBoxFor(user => user.Email)
+  <p>@Html.LabelFor(user => user.Email)
+  @Html.TextBoxFor(user => user.Email)</p>
 
-  @Html.LabelFor(user => user.Password)
-  @Html.PasswordFor(user => user.Password)
+  <p>@Html.LabelFor(user => user.Password)
+  @Html.PasswordFor(user => user.Password)</p>
 
-  @Html.LabelFor(user => user.ConfirmPassword)
-  @Html.PasswordFor(user => user.ConfirmPassword)
+  <p>@Html.LabelFor(user => user.ConfirmPassword)
+  @Html.PasswordFor(user => user.ConfirmPassword)</p>
 
   <input type="submit" value="Register" />
+
 }
